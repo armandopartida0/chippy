@@ -114,6 +114,6 @@ void Chippy::opcode()
 	}
 
 	default:
-		std::cout << "Instruction: " << std::hex << MEMORY[PC] << " not implemented." << std::endl;
+		std::cout << "Instruction: " << std::hex << instruction << " not implemented." << std::endl;
 	}
 }
