@@ -3,12 +3,14 @@
 #include <iostream>
 #include <cstdint>
 #include <stack>
+#include <fstream>
 
 class Chippy
 {
 public:
 	Chippy();
 
+	void load(char* buffer);
 	void opcode();
 
 	// Destructor to be implemented at some point
@@ -40,6 +42,7 @@ private:
 	|  interpreter  |
 	+---------------+= 0x000 (0) Start of Chip-8 RAM*/
 	uint8_t MEMORY[4096];
+	int PROGRAM_START = 0x200;
 
 	/*Registers*/
 	uint8_t V[16]; // 16 general 8-bit registers V0-VF

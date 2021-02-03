@@ -12,6 +12,14 @@ Chippy::Chippy()
 	}
 }
 
+void Chippy::load(char* buffer)
+{
+	for (int i = 0; i < sizeof(buffer); i++)
+	{
+		MEMORY[i + PROGRAM_START] = (uint8_t)buffer[i];
+	}
+}
+
 void Chippy::opcode()
 {
 	// Reference: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM 
