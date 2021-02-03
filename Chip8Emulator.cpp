@@ -39,9 +39,22 @@ int main(int argc, char** argv)
 	// Cleanup
 	delete[] buffer;
 
-	// Attempt to run
-	while(true)
+	// Simple Program loop for now
+	bool quit = false;
+	SDL_Event e;
+	while (!quit)
+	{
 		cpuTest->opcode();
+		while (SDL_PollEvent(&e) != 0)
+		{
+			if (e.type == SDL_QUIT)
+			{
+				quit = true;
+			}
+		}
+
+		SDL_UpdateWindowSurface(cpuTest->gWindow);
+	}
 
 	return 0;
 }

@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <stack>
 #include <fstream>
+#include <SDL.h>
 
 class Chippy
 {
@@ -15,6 +16,10 @@ public:
 
 	// Destructor to be implemented at some point
 	~Chippy();
+
+	// Global SDL stuff
+	SDL_Window* gWindow;
+	SDL_Surface* gScreenSurface = NULL;
 
 
 private:
@@ -62,4 +67,3 @@ private:
 	/*High res display*/
 	uint8_t DISPLAY[64 * 32];
 };
-
