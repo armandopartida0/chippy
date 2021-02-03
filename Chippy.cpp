@@ -7,6 +7,7 @@ Chippy::Chippy()
 	I = 0;
 	DELAY_TIMER = 0;
 	SOUND_TIMER = 0;
+	std::srand(time(0));
 
 	// Clear data
 	for (int i = 0; i < 64 * 32; i++)
@@ -104,9 +105,11 @@ void Chippy::opcode()
 		break;
 	case 0x6000: // Set Vx = kk.
 		V[(instruction >> 8) & 0x000F] = instruction & 0x00FF;
+		PC += 2;
 		break;
 	case 0x7000: // Set Vx = Vx + kk.
 		V[(instruction >> 8) & 0x000F] += instruction & 0x00FF;
+		PC += 2;
 		break;
 	case 0x8000: // 0x8xy0 - 0x8xy7, 0x8xyE
 	{
@@ -127,7 +130,7 @@ void Chippy::opcode()
 			V[(instruction >> 8) & 0x000F] = V[(instruction >> 8) & 0x000F] ^ V[(instruction >> 4) & 0x000F];
 			break;
 		case 0x5000: // Set Vx = Vx - Vy, set VF = NOT borrow.
-			if (V[(instruction >> 8) & 0x000F] > V[(instruction >> 4) & 0x000F])
+			if ((V[(instruction >> 8) & 0x000F]) > (V[(instruction >> 4) & 0x000F]))
 			{
 				V[0xF] = 1;
 			}
@@ -138,12 +141,66 @@ void Chippy::opcode()
 
 			V[(instruction >> 8) & 0x000F] -= V[(instruction >> 4) & 0x000F];
 			break;
+		case 0x6000: // Set Vx = Vx SHR 1.
+			if (V[(instruction >> 8) & 0x000F] & 0x1)
+			{
+				V[0xF] = 1;
+			}
+			else
+			{
+				V[0xF] = 0;
+			}
+			V[(instruction >> 8) & 0x000F] /= 2;
+			break;
+		case 0x7000: // Set Vx = Vy - Vx, set VF = NOT borrow.
+			if ((V[(instruction >> 4) & 0x000F]) > (V[(instruction >> 8) & 0x000F]))
+			{
+				V[0xF] = 1;
+			}
+			else
+			{
+				V[0xF] = 0;
+			}
+			V[(instruction >> 8) & 0x000F] = V[(instruction >> 4) & 0x000F] - V[(instruction >> 8) & 0x000F];
+			break;
+		case 0xE000: // Set Vx = Vx SHL 1.
+			if (V[(instruction >> 8) & 0x000F] & 0x1)
+			{
+				V[0xF] = 1;
+			}
+			else
+			{
+				V[0xF] = 0;
+			}
+			V[(instruction >> 8) & 0x000F] *= 2;
+			break;
 		}
 
 		PC += 2;
 
 		break;
 	}
+	case 0x9000: // Skip next instruction if Vx != Vy.
+		if (V[(instruction >> 8) & 0x000F] != V[(instruction >> 4) & 0x000F])
+		{
+			PC += 4;
+		}
+		else
+		{
+			PC += 2;
+		}
+		break;
+	case 0xA000: // Set I = nnn.
+		I = instruction & 0x0FFF;
+		PC += 2;
+		break;
+	case 0xB000: // Jump to location nnn + V0.
+		PC = (instruction & 0x0FFF) + V[0];
+		break;
+	case 0xC000: // Set Vx = random byte AND kk.
+		V[(instruction >> 8) & 0x000F] = ((int)std::rand() % 255 + 1) & (instruction & 0x00FF);
+		PC += 2;
+		break;
 
 	case 0xF000:
 	{
