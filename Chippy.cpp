@@ -121,6 +121,42 @@ void Chippy::opcode()
 		break;
 	}
 
+	case 0xF000:
+	{
+		switch (instruction & 0x00FF)
+		{
+		case 0x0007: // Set Vx = delay timer value.
+			V[(instruction >> 8) & 0x000F] = DELAY_TIMER;
+			break;
+		case 0x0015: // Set delay timer = Vx.
+			DELAY_TIMER = V[(instruction >> 8) & 0x000F];
+			break;
+		case 0x0018: // Set sound timer = Vx.
+			SOUND_TIMER = V[(instruction >> 8) & 0x000F];
+			break;
+		case 0x001E: // Set I = I + Vx.
+			I += V[(instruction >> 8) & 0x000F];
+			break;
+		case 0x0055: // Store registers V0 through Vx in memory starting at location I.
+			for (int i = 0; i < ((instruction >> 8) & 0x000F); i++)
+			{
+				MEMORY[I + i] = V[i];
+			}
+			break;
+		case 0x0065: // Read registers V0 through Vx from memory starting at location I.
+			for (int i = 0; i < ((instruction >> 8) & 0x000F); i++)
+			{
+				V[i] = MEMORY[I + i];
+			}
+			break;
+
+		}
+
+		PC += 2;
+
+		break;
+	}
+
 	default:
 		std::cout << "Instruction: " << std::hex << instruction << " not implemented." << std::endl;
 	}
