@@ -22,19 +22,11 @@ Chippy::Chippy()
 	{
 		V[i] = 0;
 	}
-
-	// Initialize SDL
-	SDL_Init(SDL_INIT_VIDEO);
-	gWindow = SDL_CreateWindow("Chippy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 640, SDL_WINDOW_SHOWN);
-	gScreenSurface = SDL_GetWindowSurface(gWindow);
 }
 
 Chippy::~Chippy()
 {
-	// Clean up SDL stuff
-	SDL_FreeSurface(gScreenSurface);
-	SDL_DestroyWindow(gWindow);
-	SDL_Quit();
+	
 }
 
 void Chippy::load(char* buffer)

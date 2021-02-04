@@ -40,20 +40,9 @@ int main(int argc, char** argv)
 	delete[] buffer;
 
 	// Simple Program loop for now
-	bool quit = false;
-	SDL_Event e;
-	while (!quit)
+	while (true)
 	{
 		cpuTest->opcode();
-		while (SDL_PollEvent(&e) != 0)
-		{
-			if (e.type == SDL_QUIT)
-			{
-				quit = true;
-			}
-		}
-
-		SDL_UpdateWindowSurface(cpuTest->gWindow);
 	}
 
 	return 0;

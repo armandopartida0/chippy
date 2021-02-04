@@ -17,11 +17,6 @@ public:
 	// Destructor to be implemented at some point
 	~Chippy();
 
-	// Global SDL stuff
-	SDL_Window* gWindow;
-	SDL_Surface* gScreenSurface = NULL;
-
-
 private:
 	/*Memory Map:
 	+---------------+= 0xFFF (4095) End of Chip-8 RAM
