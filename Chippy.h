@@ -11,8 +11,9 @@ class Chippy
 public:
 	Chippy();
 
-	void load(char* buffer, std::streampos size);
-	void opcode();
+	void load(char* buffer, std::streampos size); // Loads in program into memory
+	void opcode(); // Executes opcodes
+	void display(); // Just draws to screen
 
 	// Destructor to be implemented at some point
 	~Chippy();
@@ -84,5 +85,12 @@ private:
 	std::stack<uint16_t> STACK;
 
 	/*High res display*/
-	uint8_t DISPLAY[64 * 32];
+	int DISPLAY_WIDTH = 64;
+	int DISPLAY_HEIGHT = 32;
+	uint32_t DISPLAY[64 * 32];
+
+	/*SDL stuff*/
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	SDL_Texture* texture;
 };

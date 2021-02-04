@@ -37,10 +37,22 @@ int main(int argc, char** argv)
 	// Cleanup
 	delete[] buffer;
 
-	// Simple Program loop for now
-	for (int i = 0; i < 1000; i++)
+	// Simple SDL loop - 60hz
+	bool quit = false;
+	SDL_Event e;
+	while (!quit)
 	{
+		while (SDL_PollEvent(&e) != 0)
+		{
+			// Quit on pressing x button
+			if (e.type == SDL_QUIT)
+			{
+				quit = true;
+			}
+		}
+
 		cpuTest->opcode();
+		cpuTest->display();
 	}
 
 	return 0;
