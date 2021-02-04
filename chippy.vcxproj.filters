@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Chip8Emulator.cpp">
+    <ClCompile Include="Chippy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Chippy.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
