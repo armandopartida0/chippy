@@ -11,7 +11,7 @@ class Chippy
 public:
 	Chippy();
 
-	void load(char* buffer);
+	void load(char* buffer, std::streampos size);
 	void opcode();
 
 	// Destructor to be implemented at some point

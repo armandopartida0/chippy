@@ -26,14 +26,13 @@ Chippy::Chippy()
 
 Chippy::~Chippy()
 {
-	
 }
 
-void Chippy::load(char* buffer)
+void Chippy::load(char* buffer, std::streampos size)
 {
-	for (int i = 0; i < sizeof(buffer); i++)
+	for (long i = 0; i < size; i++)
 	{
-		MEMORY[i + PROGRAM_START] = (uint8_t)buffer[i];
+		MEMORY[i + PROGRAM_START] = buffer[i];
 	}
 }
 
@@ -233,4 +232,6 @@ void Chippy::opcode()
 	default:
 		std::cout << "Instruction: " << std::hex << instruction << " not implemented." << std::endl;
 	}
+
+	std::cout << "Instruction: " << std::hex << instruction << " executed." << std::endl;
 }
