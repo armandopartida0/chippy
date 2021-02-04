@@ -209,6 +209,11 @@ void Chippy::opcode()
 		case 0x001E: // Set I = I + Vx.
 			I += V[(instruction >> 8) & 0x000F];
 			break;
+		case 0x0033: // Store BCD representation of Vx in memory locations I, I+1, and I+2.
+			MEMORY[I] = V[(instruction >> 8) & 0x000F] % 10;
+			MEMORY[I + 1] = (V[(instruction >> 8) & 0x000F] / 10) % 10;
+			MEMORY[I + 2] = (V[(instruction >> 8) & 0x000F] / 100) % 10;
+			break;
 		case 0x0055: // Store registers V0 through Vx in memory starting at location I.
 			for (int i = 0; i < ((instruction >> 8) & 0x000F); i++)
 			{
@@ -234,4 +239,14 @@ void Chippy::opcode()
 	}
 
 	std::cout << "Instruction: " << std::hex << instruction << " executed." << std::endl;
+
+	// Timers: Should subtract 1 from values at 60hz
+	if (DELAY_TIMER > 0)
+	{
+		DELAY_TIMER--;
+	}
+	if (SOUND_TIMER > 0)
+	{
+		SOUND_TIMER--;
+	}
 }

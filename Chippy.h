@@ -54,7 +54,6 @@ private:
 
 	/*pseudo-regsssss*/
 	uint16_t PC; // program counter
-	//uint8_t SP; // stack pointer <-- might not need this
 
 	/*Big fat stack*/
 	std::stack<uint16_t> STACK;
