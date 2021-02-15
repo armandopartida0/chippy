@@ -90,7 +90,7 @@ private:
 	uint32_t DISPLAY[64 * 32];
 
 	/*SDL stuff*/
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	SDL_Texture* texture;
+	SDL_Window* window = nullptr;
+	SDL_Renderer* renderer = nullptr;
+	SDL_Texture* texture = nullptr;
 };
