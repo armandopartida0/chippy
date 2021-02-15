@@ -12,6 +12,7 @@ public:
 	Chippy();
 
 	void load(char* buffer, std::streampos size); // Loads in program into memory
+	void set_key();
 	void opcode(); // Executes opcodes
 	void display(); // Just draws to screen
 
@@ -69,6 +70,20 @@ private:
 		0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
 		0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 	};
+
+	/*Our keyboard*/
+	// If a key at any index is 1, then that key is pressed; otherwise not pressed.
+	// Layout of chippy's keyboard
+	//Of course we map it differently. I have 60% keyboard :(
+	/*
+	 _ _ _ _		 _ _ _ _
+	|1|2|3|C|		|1|2|3|4|
+	|4|5|6|D|		|Q|W|E|R|
+	|7|8|9|E|  ->	|A|S|D|F|
+	|A|0|B|F|		|Z|X|C|V|
+	 - - - -		 - - - -
+	*/
+	uint8_t keyboard[16] = {};
 
 	/*Registers*/
 	uint8_t V[16]; // 16 general 8-bit registers V0-VF

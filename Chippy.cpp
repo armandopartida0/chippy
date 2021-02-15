@@ -59,6 +59,77 @@ void Chippy::load(char* buffer, std::streampos size)
 	}
 }
 
+void Chippy::set_key()
+{
+	// Get all current key states
+	const Uint8* current_key_states = SDL_GetKeyboardState(nullptr);
+
+	if (current_key_states[SDL_SCANCODE_X])
+	{
+		keyboard[0] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_1])
+	{
+		keyboard[1] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_2])
+	{
+		keyboard[2] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_3])
+	{
+		keyboard[3] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_Q])
+	{
+		keyboard[4] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_W])
+	{
+		keyboard[5] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_E])
+	{
+		keyboard[6] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_A])
+	{
+		keyboard[7] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_S])
+	{
+		keyboard[8] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_D])
+	{
+		keyboard[9] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_Z])
+	{
+		keyboard[0xA] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_C])
+	{
+		keyboard[0xB] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_4])
+	{
+		keyboard[0xC] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_R])
+	{
+		keyboard[0xD] = 1;
+	}
+	if (current_key_states[SDL_SCANCODE_F])
+	{
+		keyboard[0xE] = 1;
+	}
+	if(current_key_states[SDL_SCANCODE_V])
+	{
+		keyboard[0xF] = 1;
+	}
+}
+
 void Chippy::opcode()
 {
 	// Reference: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM 
@@ -251,6 +322,26 @@ void Chippy::opcode()
 		}
 		break;
 	}
+	case 0xE000:
+	{
+		switch (instruction & 0x00FF)
+		{
+		case 0x009E: // Skip next instruction if key with the value of Vx is pressed.
+			if (keyboard[V[x]])
+			{
+				PC += 2;
+			}
+			break;
+		case 0x00A1: // Skip next instruction if key with the value of Vx is not pressed.
+			if (!keyboard[V[x]])
+			{
+				PC += 2;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 	case 0xF000:
 	{
 		switch (instruction & 0x00FF)
@@ -258,6 +349,24 @@ void Chippy::opcode()
 		case 0x0007: // Set Vx = delay timer value.
 			V[x] = DELAY_TIMER;
 			break;
+		case 0x000A: // Wait for a key press, store the value of the key in Vx.
+		{
+			bool key_pressed = false;
+			for (int i = 0; i < 16; i++)
+			{
+				if (keyboard[i])
+				{
+					key_pressed = true;
+					V[x] = i;
+				}
+			}
+
+			if (!key_pressed)
+			{
+				PC -= 2; // This is so that we stay on the same instruction
+			}
+			break;
+		}
 		case 0x0015: // Set delay timer = Vx.
 			DELAY_TIMER = V[x];
 			break;
@@ -304,6 +413,12 @@ void Chippy::opcode()
 	if (SOUND_TIMER > 0)
 	{
 		SOUND_TIMER--;
+	}
+
+	// Clear keyboard 
+	for (int i = 0; i < 16; i++)
+	{
+		keyboard[i] = 0;
 	}
 }
 

@@ -51,6 +51,8 @@ int main(int argc, char** argv)
 			}
 		}
 
+		// chippy stuff
+		cpuTest->set_key();
 		cpuTest->opcode();
 		cpuTest->display();
 	}
