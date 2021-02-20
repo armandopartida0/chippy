@@ -37,11 +37,18 @@ int main(int argc, char** argv)
 	// Cleanup
 	delete[] buffer;
 
-	// Simple SDL loop - 60hz
+	// Simple SDL loop - 60 FPS
 	bool quit = false;
 	SDL_Event e;
+
+	// Timer
+	using clock = std::chrono::steady_clock;
+	auto next_frame = clock::now();
+
 	while (!quit)
 	{
+		next_frame += std::chrono::milliseconds(1000 / 60);
+
 		while (SDL_PollEvent(&e) != 0)
 		{
 			// Quit on pressing x button
@@ -51,10 +58,21 @@ int main(int argc, char** argv)
 			}
 		}
 
-		// chippy stuff
-		cpuTest->set_key();
-		cpuTest->opcode();
+		// Execute specified amount of instructions per second
+		for (int i = 0; i < 10; i++)
+		{
+			cpuTest->set_key();
+			cpuTest->opcode();
+		}
+
+		// Update timers
+		cpuTest->update_timers();
+
+		// Update display
 		cpuTest->display();
+
+		// Wait for end of frame
+		std::this_thread::sleep_until(next_frame);
 	}
 
 	return 0;

@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <stack>
 #include <fstream>
+#include <chrono>
+#include <thread>
+#include <ctime>
 #include <SDL.h>
 
 class Chippy
@@ -14,6 +17,7 @@ public:
 	void load(char* buffer, std::streampos size); // Loads in program into memory
 	void set_key();
 	void opcode(); // Executes opcodes
+	void update_timers(); // Updates our timers
 	void display(); // Just draws to screen
 
 	// Destructor to be implemented at some point

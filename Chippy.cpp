@@ -7,7 +7,7 @@ Chippy::Chippy()
 	I = 0;
 	DELAY_TIMER = 0;
 	SOUND_TIMER = 0;
-	std::srand(time(0));
+	std::srand(static_cast<unsigned int>(time(0)));
 
 	// Clear data
 	for (int i = 0; i < 64 * 32; i++)
@@ -37,7 +37,7 @@ Chippy::Chippy()
 	else
 	{
 		window = SDL_CreateWindow("chippy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 640, SDL_WINDOW_SHOWN);
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 	}
 }
@@ -403,8 +403,17 @@ void Chippy::opcode()
 		std::cout << "Instruction: " << std::hex << instruction << " not implemented." << std::endl;
 	}
 
-	std::cout << "Instruction: " << std::hex << instruction << " executed." << std::endl;
+	//std::cout << "Instruction: " << std::hex << instruction << " executed." << std::endl;
 
+	// Clear keyboard 
+	for (int i = 0; i < 16; i++)
+	{
+		keyboard[i] = 0;
+	}
+}
+
+void Chippy::update_timers()
+{
 	// Timers: Should subtract 1 from values at 60hz
 	if (DELAY_TIMER > 0)
 	{
@@ -413,12 +422,6 @@ void Chippy::opcode()
 	if (SOUND_TIMER > 0)
 	{
 		SOUND_TIMER--;
-	}
-
-	// Clear keyboard 
-	for (int i = 0; i < 16; i++)
-	{
-		keyboard[i] = 0;
 	}
 }
 
