@@ -3,28 +3,19 @@
 Chippy::Chippy()
 {
 	// initialize chip8 stuff here
-	PC = 0x200;
+	PC = PROGRAM_START;
 	I = 0;
 	DELAY_TIMER = 0;
 	SOUND_TIMER = 0;
 	std::srand(static_cast<unsigned int>(time(0)));
 
 	// Clear data
-	for (int i = 0; i < 64 * 32; i++)
-	{
-		DISPLAY[i] = 0;
-	}
-	for (int i = 0; i < 4096; i++)
-	{
-		MEMORY[i] = 0;
-	}
-	for (int i = 0; i < 16; i++)
-	{
-		V[i] = 0;
-	}
+	std::fill(std::begin(DISPLAY), std::end(DISPLAY), 0);
+	std::fill(std::begin(MEMORY), std::end(MEMORY), 0);
+	std::fill(std::begin(V), std::end(V), 0);
 
 	// Load spriteset
-	for (int i = 0; i < 80; i++)
+	for (int i = 0; i < sprites.size(); i++)
 	{
 		MEMORY[SPRITESET_START + i] = sprites[i];
 	}
@@ -61,8 +52,11 @@ void Chippy::load(char* buffer, std::streampos size)
 
 void Chippy::set_key()
 {
-	// Get all current key states
-	const Uint8* current_key_states = SDL_GetKeyboardState(nullptr);
+	// Clear our keyboard
+	std::fill(std::begin(keyboard), std::end(keyboard), 0);
+
+	// Get all current key states and set keys accordingly
+	const std::uint8_t* current_key_states{ SDL_GetKeyboardState(nullptr) };
 
 	if (current_key_states[SDL_SCANCODE_X])
 	{
@@ -134,11 +128,11 @@ void Chippy::opcode()
 {
 	// Reference: http://devernay.free.fr/hacks/chip8/C8TECH10.HTM 
 	// All instructions are two bytes. So increase PC by 2 unless specified
-	uint16_t instruction = MEMORY[PC] << 8 | MEMORY[PC + 1];
+	std::uint16_t instruction{ static_cast<std::uint16_t>(MEMORY[PC] << 8 | MEMORY[PC + 1]) };
 
 	// Common variables
-	int x = (instruction & 0x0F00) >> 8; // Index used for V[x] register
-	int y = (instruction & 0x00F0) >> 4; // Index used for V[y] register
+	int x{ (instruction & 0x0F00) >> 8 }; // Index used for V[x] register
+	int y{ (instruction & 0x00F0) >> 4 }; // Index used for V[y] register
 
 	PC += 2;
 
@@ -149,7 +143,7 @@ void Chippy::opcode()
 		switch (instruction)
 		{
 		case 0x00E0: // Clear the display.
-			memset(DISPLAY, 0, sizeof(DISPLAY));
+			std::fill(std::begin(DISPLAY), std::end(DISPLAY), 0);
 			break;
 		case 0x00EE: // Return from a subroutine.
 			PC = STACK.top();
@@ -207,7 +201,7 @@ void Chippy::opcode()
 			break;
 		case 0x0004: // Set Vx = Vx + Vy, set VF = carry.
 		{
-			uint16_t sum = V[x] + V[y];
+			std::uint16_t sum{ static_cast<std::uint16_t>(V[x] + V[y]) };
 
 			if (sum > 255)
 			{
@@ -285,28 +279,28 @@ void Chippy::opcode()
 		PC = (instruction & 0x0FFF) + V[0];
 		break;
 	case 0xC000: // Set Vx = random byte AND kk.
-		V[x] = ((int)std::rand() % 255 + 1) & (instruction & 0x00FF);
+		V[x] = static_cast<int>(std::rand() % 255 + 1) & (instruction & 0x00FF);
 		break;
 	case 0xD000: // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
 	{
 		// Make sure it wraps with display
-		uint8_t x_pos = V[x] % DISPLAY_WIDTH;
-		uint8_t y_pos = V[y] % DISPLAY_HEIGHT;
-		uint8_t height = instruction & 0x000F;
+		std::uint8_t x_pos{ static_cast<std::uint8_t>(V[x] % DISPLAY_WIDTH) };
+		std::uint8_t y_pos{ static_cast<std::uint8_t>(V[y] % DISPLAY_HEIGHT) };
+		std::uint8_t height{ static_cast<std::uint8_t>(instruction & 0x000F) };
 
 		V[0xF] = 0;
 
 		for (int i = 0; i < height; i++)
 		{
-			uint8_t sprite_data = MEMORY[I + i];
+			std::uint8_t sprite_data{ MEMORY[I + i] };
 
 			// All sprites are 8 bits in width
 			for (int j = 0; j < 8; j++)
 			{
-				uint8_t sprite_pixel = sprite_data & (0x80 >> j);
+				std::uint8_t sprite_pixel{ static_cast<std::uint8_t>(sprite_data & (0x80 >> j)) };
 
 				// Get the corresponding display pixel on our screen
-				uint32_t* display_pixel = &DISPLAY[(y_pos + i) * DISPLAY_WIDTH + (x_pos + j)];
+				std::uint32_t* display_pixel{ &DISPLAY.data()[(y_pos + i) * DISPLAY_WIDTH + (x_pos + j)] };
 
 				// Check if they collide
 				if (sprite_pixel)
@@ -351,8 +345,8 @@ void Chippy::opcode()
 			break;
 		case 0x000A: // Wait for a key press, store the value of the key in Vx.
 		{
-			bool key_pressed = false;
-			for (int i = 0; i < 16; i++)
+			bool key_pressed{ false };
+			for (int i = 0; i < keyboard.size(); i++)
 			{
 				if (keyboard[i])
 				{
@@ -404,12 +398,6 @@ void Chippy::opcode()
 	}
 
 	//std::cout << "Instruction: " << std::hex << instruction << " executed." << std::endl;
-
-	// Clear keyboard 
-	for (int i = 0; i < 16; i++)
-	{
-		keyboard[i] = 0;
-	}
 }
 
 void Chippy::update_timers()
@@ -427,7 +415,7 @@ void Chippy::update_timers()
 
 void Chippy::display()
 {
-	SDL_UpdateTexture(texture, nullptr, DISPLAY, sizeof(DISPLAY[0]) * DISPLAY_WIDTH);
+	SDL_UpdateTexture(texture, nullptr, DISPLAY.data(), sizeof(DISPLAY[0]) * DISPLAY_WIDTH);
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, nullptr, nullptr);
 	SDL_RenderPresent(renderer);

@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <ctime>
+#include <array>
 #include <SDL.h>
 
 class Chippy
@@ -47,15 +48,15 @@ private:
 	| Reserved for  |
 	|  interpreter  |
 	+---------------+= 0x000 (0) Start of Chip-8 RAM*/
-	uint8_t MEMORY[4096];
-	int PROGRAM_START = 0x200;
+	std::array<std::uint8_t, 4096> MEMORY{};
+	int PROGRAM_START{ 0x200 };
 
 	// I'm not sure where exactly it should be started other than that
 	// it should be between 0x000-0x1FF, so lets just put it near the beginning.
 	// Also there are 16 sprites, each 5 bytes in size
 	// Reference (Display): http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
-	int SPRITESET_START = 0x10;
-	uint8_t sprites[16 * 5] =
+	int SPRITESET_START{ 0x10 };
+	std::array<std::uint8_t, 16 * 5> sprites
 	{
 		0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
 		0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -87,29 +88,29 @@ private:
 	|A|0|B|F|		|Z|X|C|V|
 	 - - - -		 - - - -
 	*/
-	uint8_t keyboard[16] = {};
+	std::array<std::uint8_t, 16> keyboard{};
 
 	/*Registers*/
-	uint8_t V[16]; // 16 general 8-bit registers V0-VF
-	uint16_t I; // 16-bit register to store memory addresses, lowest 12 bits are used
+	std::array<std::uint8_t, 16> V{}; // 16 general 8-bit registers V0-VF
+	std::uint16_t I{}; // 16-bit register to store memory addresses, lowest 12 bits are used
 
 	/*Timers, rate of 60hz*/
-	uint8_t DELAY_TIMER;
-	uint8_t SOUND_TIMER;
+	std::uint8_t DELAY_TIMER{};
+	std::uint8_t SOUND_TIMER{};
 
 	/*pseudo-regsssss*/
-	uint16_t PC; // program counter
+	std::uint16_t PC{}; // program counter
 
 	/*Big fat stack*/
-	std::stack<uint16_t> STACK;
+	std::stack<std::uint16_t> STACK{};
 
 	/*High res display*/
-	int DISPLAY_WIDTH = 64;
-	int DISPLAY_HEIGHT = 32;
-	uint32_t DISPLAY[64 * 32];
+	int DISPLAY_WIDTH{ 64 };
+	int DISPLAY_HEIGHT{ 32 };
+	std::array<std::uint32_t, 64 * 32> DISPLAY{};
 
 	/*SDL stuff*/
-	SDL_Window* window = nullptr;
-	SDL_Renderer* renderer = nullptr;
-	SDL_Texture* texture = nullptr;
+	SDL_Window* window{ nullptr };
+	SDL_Renderer* renderer{ nullptr };
+	SDL_Texture* texture{ nullptr };
 };
