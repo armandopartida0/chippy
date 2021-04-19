@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Libraries\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Libraries\SDL2-2.0.14\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Projects\Dependencies\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Projects\Dependencies\SDL2-2.0.14\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
