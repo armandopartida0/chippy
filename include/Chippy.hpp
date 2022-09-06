@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CHIPPY_HPP
+#define CHIPPY_HPP
 
 #include <iostream>
 #include <cstdint>
@@ -8,7 +9,7 @@
 #include <thread>
 #include <ctime>
 #include <array>
-#include <SDL.h>
+//#include <SDL.h>
 
 class Chippy
 {
@@ -110,7 +111,9 @@ private:
 	std::array<std::uint32_t, 64 * 32> DISPLAY{};
 
 	/*SDL stuff*/
-	SDL_Window* window{ nullptr };
+	/*SDL_Window* window{ nullptr };
 	SDL_Renderer* renderer{ nullptr };
-	SDL_Texture* texture{ nullptr };
+	SDL_Texture* texture{ nullptr };*/
 };
+
+#endif

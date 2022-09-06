@@ -1,7 +1,7 @@
 // Chip8Emulator.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "Chippy.h"
+#include "Chippy.hpp"
 
 int main(int argc, char** argv)
 {
@@ -39,10 +39,10 @@ int main(int argc, char** argv)
 
 	// Simple SDL loop - 60 FPS
 	bool quit = false;
-	SDL_Event e;
+	//SDL_Event e;
 
 	// Timer
-	using clock = std::chrono::steady_clock;
+	/*using clock = std::chrono::steady_clock;
 	auto next_frame = clock::now();
 
 	while (!quit)
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 
 		// Wait for end of frame
 		std::this_thread::sleep_until(next_frame);
-	}
+	}*/
 
 	return 0;
 }

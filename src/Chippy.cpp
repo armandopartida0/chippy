@@ -1,4 +1,4 @@
-#include "Chippy.h"
+#include "Chippy.hpp"
 
 Chippy::Chippy()
 {
@@ -21,7 +21,7 @@ Chippy::Chippy()
 	}
 
 	// initialize SDL stuff
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	/*if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		std::cout << "Failed to initialize SDL Video subsystem" << std::endl;
 	}
@@ -30,16 +30,16 @@ Chippy::Chippy()
 		window = SDL_CreateWindow("chippy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 640, SDL_WINDOW_SHOWN);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-	}
+	}*/
 }
 
 Chippy::~Chippy()
 {
 	// Cleanup SDL stuff
-	SDL_DestroyTexture(texture);
+	/*SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	SDL_Quit();
+	SDL_Quit();*/
 }
 
 void Chippy::load(char* buffer, std::streampos size)
@@ -55,7 +55,7 @@ void Chippy::set_key()
 	// Clear our keyboard
 	std::fill(std::begin(keyboard), std::end(keyboard), 0);
 
-	// Get all current key states and set keys accordingly
+	/*// Get all current key states and set keys accordingly
 	const std::uint8_t* current_key_states{ SDL_GetKeyboardState(nullptr) };
 
 	if (current_key_states[SDL_SCANCODE_X])
@@ -121,7 +121,7 @@ void Chippy::set_key()
 	if(current_key_states[SDL_SCANCODE_V])
 	{
 		keyboard[0xF] = 1;
-	}
+	}*/
 }
 
 void Chippy::opcode()
@@ -415,8 +415,8 @@ void Chippy::update_timers()
 
 void Chippy::display()
 {
-	SDL_UpdateTexture(texture, nullptr, DISPLAY.data(), sizeof(DISPLAY[0]) * DISPLAY_WIDTH);
+	/*SDL_UpdateTexture(texture, nullptr, DISPLAY.data(), sizeof(DISPLAY[0]) * DISPLAY_WIDTH);
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-	SDL_RenderPresent(renderer);
+	SDL_RenderPresent(renderer);*/
 }
