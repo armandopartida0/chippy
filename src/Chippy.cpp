@@ -20,26 +20,18 @@ Chippy::Chippy()
 		MEMORY[SPRITESET_START + i] = sprites[i];
 	}
 
-	// initialize SDL stuff
-	/*if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		std::cout << "Failed to initialize SDL Video subsystem" << std::endl;
-	}
-	else
-	{
-		window = SDL_CreateWindow("chippy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 640, SDL_WINDOW_SHOWN);
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-	}*/
+	// Initialize raylib components
+	m_window = raylib::Window(640, 320, "chippy");
 }
 
 Chippy::~Chippy()
 {
-	// Cleanup SDL stuff
-	/*SDL_DestroyTexture(texture);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();*/
+
+}
+
+bool Chippy::ShouldClose()
+{
+	return m_window.ShouldClose();
 }
 
 void Chippy::load(char* buffer, std::streampos size)
@@ -411,12 +403,4 @@ void Chippy::update_timers()
 	{
 		SOUND_TIMER--;
 	}
-}
-
-void Chippy::display()
-{
-	/*SDL_UpdateTexture(texture, nullptr, DISPLAY.data(), sizeof(DISPLAY[0]) * DISPLAY_WIDTH);
-	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-	SDL_RenderPresent(renderer);*/
 }

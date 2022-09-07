@@ -9,18 +9,20 @@
 #include <thread>
 #include <ctime>
 #include <array>
-//#include <SDL.h>
+#include <memory>
+
+#include "raylib-cpp.hpp"
 
 class Chippy
 {
 public:
 	Chippy();
 
+	bool ShouldClose();
 	void load(char* buffer, std::streampos size); // Loads in program into memory
 	void set_key();
 	void opcode(); // Executes opcodes
 	void update_timers(); // Updates our timers
-	void display(); // Just draws to screen
 
 	// Destructor to be implemented at some point
 	~Chippy();
@@ -109,11 +111,6 @@ private:
 	int DISPLAY_WIDTH{ 64 };
 	int DISPLAY_HEIGHT{ 32 };
 	std::array<std::uint32_t, 64 * 32> DISPLAY{};
-
-	/*SDL stuff*/
-	/*SDL_Window* window{ nullptr };
-	SDL_Renderer* renderer{ nullptr };
-	SDL_Texture* texture{ nullptr };*/
 };
 
 #endif
