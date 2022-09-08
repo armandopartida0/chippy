@@ -34,11 +34,9 @@ void ChippyCpu::LoadProgram(char* buffer, std::streampos size)
 	}
 }
 
-void ChippyCpu::SetKey()
+void ChippyCpu::SetKeyboardState(std::array<int, 16> state)
 {
-	std::fill(std::begin(keyboard_), std::end(keyboard_), 0);
-
-	/* TODO: Implement raylib's input system */
+	keyboard_ = state;
 }
 
 void ChippyCpu::Opcode()

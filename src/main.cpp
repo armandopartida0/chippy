@@ -6,6 +6,7 @@
 
 #include "chippy_cpu.h"
 #include "chippy_display.h"
+#include "chippy_input.h"
 
 int main(int argc, char **argv)
 {
@@ -26,6 +27,7 @@ int main(int argc, char **argv)
 
 	/* Initialize */
 	std::unique_ptr<ChippyCpu> cpu = std::make_unique<ChippyCpu>();
+	std::unique_ptr<ChippyInput> input = std::make_unique<ChippyInput>();
 	std::unique_ptr<ChippyDisplay> display = std::make_unique<ChippyDisplay>();
 
 	/* Load file into temp buffer */
@@ -47,24 +49,15 @@ int main(int argc, char **argv)
 	{
 		while (SDL_PollEvent(&e) != 0)
 		{
-			// Quit on pressing x button
 			if (e.type == SDL_QUIT)
 			{
 				quit = true;
 			}
 		}
 
-		/* Execute specified amount of instructions per second */
-		for (int i = 0; i < 10; i++)
-		{
-			cpu->SetKey();
-			cpu->Opcode();
-		}
-
-		/* Update timers */
+		cpu->SetKeyboardState(input->GetInput());
+		cpu->Opcode();
 		cpu->UpdateTimers();
-
-		/* Update display */
 		display->Draw(cpu->GetDisplayBuffer());
 	}
 

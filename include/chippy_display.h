@@ -23,8 +23,8 @@ private:
   const int kwindow_height_ = 640;
 
   /* SDL stuff */
-  SDL_Window* window_;
-  SDL_Renderer* renderer_;
+  SDL_Window* window_ = nullptr;
+  SDL_Renderer* renderer_ = nullptr;
 };
 
 #endif

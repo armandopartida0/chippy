@@ -17,7 +17,7 @@ public:
 	ChippyCpu(); /* Initialize chip-8 state, load sprite data */
 
 	void LoadProgram(char* buffer, std::streampos size); /* Loads in program into memory */
-	void SetKey(); /* Sets currently pressed key into memory */
+	void SetKeyboardState(std::array<int, 16> state); /* Sets currently pressed key into memory */
 	void Opcode(); /* Executes single opcode, changes memory state */
 	void UpdateTimers(); /* Updates our chip-8 timers */
 	inline std::array<uint32_t, 64 * 32> GetDisplayBuffer() const { return display_; }
@@ -92,7 +92,7 @@ private:
 			|A|0|B|F|		|Z|X|C|V|
 			- - - -		 - - - -
 	*/
-	std::array<std::uint8_t, 16> keyboard_{};
+	std::array<int, 16> keyboard_{};
 
 	/* Registers */
 	std::array<std::uint8_t, 16> v_register_{}; /* 16 general 8-bit registers V0-VF */

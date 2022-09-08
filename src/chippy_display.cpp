@@ -25,9 +25,9 @@ ChippyDisplay::~ChippyDisplay()
 void ChippyDisplay::Draw(std::array<uint32_t, 64 * 32> buffer)
 {
   SDL_Texture* texture = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_RGBA8888, 
-    SDL_TEXTUREACCESS_STREAMING, kwindow_width_, kwindow_height_);
+    SDL_TEXTUREACCESS_STREAMING, 64, 32);
 
-  SDL_UpdateTexture(texture, nullptr, buffer.data(), sizeof(buffer[0]) * kwindow_width_);
+  SDL_UpdateTexture(texture, nullptr, buffer.data(), sizeof(buffer[0]) * 64);
 	SDL_RenderClear(renderer_);
 	SDL_RenderCopy(renderer_, texture, nullptr, nullptr);
 	SDL_RenderPresent(renderer_);
