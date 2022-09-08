@@ -42,7 +42,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: chippy-windows
-        path: ${{github.workspace}}build\Release\
+        path: ${{github.workspace}}\build\Release\
       
   ubuntu_build:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
