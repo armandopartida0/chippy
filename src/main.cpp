@@ -2,6 +2,8 @@
 #include <iostream>
 #include <memory>
 
+#include "SDL.h"
+
 #include "chippy_cpu.h"
 #include "chippy_display.h"
 
@@ -39,8 +41,19 @@ int main(int argc, char **argv)
 	/* Cleanup */
 	delete[] buffer;
 
-	while (display->IsWindowRunning())
+	bool quit = false;
+	SDL_Event e;
+	while (!quit)
 	{
+		while (SDL_PollEvent(&e) != 0)
+		{
+			// Quit on pressing x button
+			if (e.type == SDL_QUIT)
+			{
+				quit = true;
+			}
+		}
+
 		/* Execute specified amount of instructions per second */
 		for (int i = 0; i < 10; i++)
 		{

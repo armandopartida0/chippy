@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 
 #include "SDL.h"
@@ -14,7 +15,7 @@ public:
   ~ChippyDisplay();
 
   void Draw(std::array<uint32_t, 64 * 32> buffer);
-  inline bool IsWindowRunning() const { return !WindowShouldClose(); }
+  inline bool IsWindowRunning() const { return true; }
 
 private:
   /* Window settings */
@@ -22,7 +23,8 @@ private:
   const int kwindow_height_ = 640;
 
   /* SDL stuff */
-  std::unique_ptr<
+  SDL_Window* window_;
+  SDL_Renderer* renderer_;
 };
 
 #endif
