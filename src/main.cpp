@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 	bool quit = false;
 	SDL_Event e;
 	Uint32 time_per_frame = 1000 / 60;
-	while (!quit)
+	while (true)
 	{
 		auto start_time = SDL_GetTicks();
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 		{
 			if (e.type == SDL_QUIT)
 			{
-				quit = true;
+				return 0;
 			}
 		}
 
@@ -73,6 +73,4 @@ int main(int argc, char **argv)
 		cpu->UpdateTimers();
 		display->Draw(cpu->GetDisplayBuffer());
 	}
-
-	return 0;
 }
