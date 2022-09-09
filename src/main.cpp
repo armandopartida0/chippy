@@ -42,11 +42,15 @@ int main(int argc, char **argv)
 
 	/* Cleanup */
 	delete[] buffer;
-
+	
+	/* Loop will try to run at 60 FPS, not accurate because of sleep */
 	bool quit = false;
 	SDL_Event e;
+	Uint32 time_per_frame = 1000 / 60;
 	while (!quit)
 	{
+		auto start_time = SDL_GetTicks();
+
 		while (SDL_PollEvent(&e) != 0)
 		{
 			if (e.type == SDL_QUIT)
@@ -55,8 +59,17 @@ int main(int argc, char **argv)
 			}
 		}
 
-		cpu->SetKeyboardState(input->GetInput());
-		cpu->Opcode();
+		/* Roughly 8 instructions per frame */
+		for(auto i = 0; i < 8; i++)
+		{
+			cpu->SetKeyboardState(input->GetInput());
+			cpu->Opcode();
+		}
+
+		auto end_time = SDL_GetTicks();
+		auto delta_time = end_time - start_time;
+		SDL_Delay(time_per_frame - delta_time);
+
 		cpu->UpdateTimers();
 		display->Draw(cpu->GetDisplayBuffer());
 	}
