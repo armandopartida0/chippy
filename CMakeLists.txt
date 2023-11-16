@@ -1,12 +1,29 @@
-cmake_minimum_required(VERSION 3.10)
-set(CMAKE_CXX_STANDARD 17)
+cmake_minimum_required(VERSION 3.27)
 project(chippy)
 
-add_subdirectory(SDL)
+# Adding Raylib
+include(FetchContent)
+set(FETCHCONTENT_QUIET FALSE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example games
 
-include_directories(include)
+FetchContent_Declare(
+    raylib
+    GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
+    GIT_TAG "master"
+    GIT_PROGRESS TRUE
+)
 
-file(GLOB SOURCES "src/*.cpp")
+FetchContent_MakeAvailable(raylib)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} SDL2main SDL2-static)
+# Our project files
+set(PROJECT_SOURCES
+    src/main.cpp
+)
+
+set(PROJECT_INCLUDES
+
+)
+
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_INCLUDES} ${raylib_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${raylib_LIBRARIES})
