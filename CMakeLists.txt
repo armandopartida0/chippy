@@ -11,12 +11,10 @@ set(PROJECT_SOURCES
     src/chippy_cpu.cpp
     src/chippy_display.cpp
 )
-
-set(PROJECT_INCLUDES
+set(PROJECT_HEADERS
     src/chippy_cpu.hpp
     src/chippy_display.hpp
 )
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
-target_include_directories(chippy PRIVATE include)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 target_link_libraries(${PROJECT_NAME} raylib)
