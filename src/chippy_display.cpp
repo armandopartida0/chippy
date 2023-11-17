@@ -2,7 +2,9 @@
 
 ChippyDisplay::ChippyDisplay()
 {
+  // Configure window
   InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "chippy");
+  SetConfigFlags(FLAG_VSYNC_HINT);
 
   // Setup internal display (Just a scaled up texture)
   Image image = GenImageColor(64, 32, BLACK);
