@@ -1,4 +1,4 @@
-#include "chippy_input.h"
+#include "chippy_input.hpp"
 
 std::array<int, 16>& ChippyInput::GetInput()
 {

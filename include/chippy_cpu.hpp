@@ -1,5 +1,5 @@
-#ifndef CHIPPY_CPU_H
-#define CHIPPY_CPU_H
+#ifndef CHIPPY_CPU_HPP
+#define CHIPPY_CPU_HPP
 
 #include <array>
 #include <chrono>

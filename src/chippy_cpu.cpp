@@ -1,4 +1,4 @@
-#include "chippy_cpu.h"
+#include "chippy_cpu.hpp"
 
 ChippyCpu::ChippyCpu()
 {

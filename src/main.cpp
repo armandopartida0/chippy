@@ -4,8 +4,8 @@
 
 // #include "SDL.h"
 
-// #include "chippy_cpu.h"
-// #include "chippy_display.h"
+#include "chippy_cpu.hpp"
+#include "chippy_display.hpp"
 // #include "chippy_input.h"
 
 int main(int argc, char **argv)
@@ -26,9 +26,9 @@ int main(int argc, char **argv)
 	}
 
 	/* Initialize */
-	// std::unique_ptr<ChippyCpu> cpu = std::make_unique<ChippyCpu>();
+	std::unique_ptr<ChippyCpu> cpu = std::make_unique<ChippyCpu>();
 	// std::unique_ptr<ChippyInput> input = std::make_unique<ChippyInput>();
-	// std::unique_ptr<ChippyDisplay> display = std::make_unique<ChippyDisplay>();
+	std::unique_ptr<ChippyDisplay> display = std::make_unique<ChippyDisplay>();
 
 	/* Load file into temp buffer */
 	std::streampos size = file.tellg();
@@ -38,10 +38,25 @@ int main(int argc, char **argv)
 	file.close();
 
 	/* Load temp buffer into memory */
-	// cpu->LoadProgram(buffer, size);
+	cpu->LoadProgram(buffer, size);
 
 	/* Cleanup */
 	delete[] buffer;
+
+	SetTargetFPS(60);
+	while(display->IsWindowRunning())
+	{
+		/* Roughly 8 instructions per frame */
+		for(auto i = 0; i < 8; i++)
+		{
+			cpu->Opcode();
+		}
+
+		cpu->UpdateTimers();
+		display->Draw(cpu->GetDisplayBuffer());
+	}
+
+	return 0;
 	
 	/* Loop will try to run at 60 FPS, not accurate because of sleep */
 	// bool quit = false;

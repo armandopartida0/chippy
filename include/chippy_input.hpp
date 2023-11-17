@@ -1,5 +1,5 @@
-#ifndef CHIPPY_INPUT_H
-#define CHIPPY_INPUT_H
+#ifndef CHIPPY_INPUT_HPP
+#define CHIPPY_INPUT_HPP
 
 #include <array>
 
