@@ -8,21 +8,19 @@
 
 #include "raylib.h"
 
+#include "configuration.hpp"
+
 class ChippyDisplay
 {
 public:
   ChippyDisplay();
   ~ChippyDisplay();
 
-  void Draw(std::array<uint32_t, 64 * 32> buffer);
-  inline bool IsWindowRunning() const { return !WindowShouldClose(); }
+  void Draw(const std::array<std::uint32_t, INTERNAL_WIDTH * INTERNAL_HEIGHT> &buffer) const;
+  bool IsWindowRunning() const { return !WindowShouldClose(); }
 
 private:
-  /* Window settings */
-  const unsigned int WINDOW_WIDTH = 1280;
-  const unsigned int WINDOW_HEIGHT = 640;
-
-  /* SDL stuff */
+  /* raylib GPU texture */
   Texture2D texture_;
 };
 

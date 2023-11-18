@@ -18,13 +18,13 @@ ChippyDisplay::~ChippyDisplay()
   UnloadTexture(texture_);
 }
 
-void ChippyDisplay::Draw(std::array<uint32_t, 64 * 32> buffer)
+void ChippyDisplay::Draw(const std::array<std::uint32_t, INTERNAL_WIDTH * INTERNAL_HEIGHT> &buffer) const
 {
   // Update texture on GPU
   UpdateTexture(texture_, &buffer);
 
   BeginDrawing();
   ClearBackground(BLACK);
-  DrawTextureEx(texture_, {0, 0}, 0.0, 20.0, WHITE);
+  DrawTextureEx(texture_, {0, 0}, 0.0, WINDOW_WIDTH / INTERNAL_WIDTH, WHITE); // Scale up texture to window
   EndDrawing();
 }

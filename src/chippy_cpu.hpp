@@ -11,16 +11,28 @@
 #include <stack>
 #include <thread>
 
+#include "configuration.hpp"
+
 class ChippyCpu
 {
 public:
-	ChippyCpu(); /* Initialize chip-8 state, load sprite data */
+	/* Initialize chip-8 state, load sprite data */
+	ChippyCpu();
 
-	void LoadProgram(char* buffer, std::streampos size); /* Loads in program into memory */
-	void SetKeyboardState(std::array<int, 16> state); /* Sets currently pressed key into memory */
-	void Opcode(); /* Executes single opcode, changes memory state */
-	void UpdateTimers(); /* Updates our chip-8 timers */
-	inline std::array<uint32_t, 64 * 32> GetDisplayBuffer() const { return display_; }
+	/* Loads in program into memory */
+	void LoadProgram(char *buffer, size_t size);
+
+	/* Sets currently pressed key into memory */
+	void SetKeyboardState(std::array<int, 16> state);
+
+	/* Executes single opcode, changes memory state */
+	void Opcode();
+
+	/* Updates our chip-8 timers */
+	void UpdateTimers();
+
+	/* Get the internal display buffer in width * height format */
+	const auto &GetDisplayBuffer() { return display_; }
 
 	~ChippyCpu();
 
@@ -51,17 +63,14 @@ private:
 		+---------------+= 0x000 (0) Start of Chip-8 RAM
 	*/
 	std::array<std::uint8_t, 4096> memory_{};
-	const int kprogram_start_ = 0x200;
 
-	/* 
+	/*
 		I'm not sure where exactly it should be started other than that
-		it should be between 0x000-0x1FF, so lets just put it near the beginning.
+		it should be between 0x000-0x1FF, so just put it near the beginning.
 		Also there are 16 sprites, each 5 bytes in size
 		Reference (Display): http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
 	*/
-	const int ksprite_set_start_ = 0x10;
-	const std::array<std::uint8_t, 16 * 5> ksprites_
-	{
+	const std::array<std::uint8_t, 16 * 5> sprites_{
 		0xF0, 0x90, 0x90, 0x90, 0xF0, /* 0 */
 		0x20, 0x60, 0x20, 0x20, 0x70, /* 1 */
 		0xF0, 0x10, 0xF0, 0x80, 0xF0, /* 2 */
@@ -80,23 +89,23 @@ private:
 		0xF0, 0x80, 0xF0, 0x80, 0x80  /* F */
 	};
 
-	/* 
-		Our keyboard: 
+	/*
+		Our keyboard:
 		If a key at any index is 1, then that key is pressed; otherwise not pressed.
 		Layout of chippy's keyboard
 		Of course we map it differently. I have 60% keyboard :(
-			_ _ _ _		 _ _ _ _
+			_ _ _ _			 _ _ _ _
 			|1|2|3|C|		|1|2|3|4|
 			|4|5|6|D|		|Q|W|E|R|
-			|7|8|9|E| ->|A|S|D|F|
+			|7|8|9|E| ->	|A|S|D|F|
 			|A|0|B|F|		|Z|X|C|V|
-			- - - -		 - - - -
+			- - - -		 	- - - -
 	*/
 	std::array<int, 16> keyboard_{};
 
 	/* Registers */
 	std::array<std::uint8_t, 16> v_register_{}; /* 16 general 8-bit registers V0-VF */
-	std::uint16_t i_register_{}; /* 16-bit register to store memory addresses, lowest 12 bits are used */
+	std::uint16_t i_register_{};				/* 16-bit register to store memory addresses, lowest 12 bits are used */
 
 	/* Timers, rate of 60hz */
 	std::uint8_t delay_timer_{};
@@ -109,9 +118,7 @@ private:
 	std::stack<std::uint16_t> stack_{};
 
 	/* High-res display lol */
-	const int kdisplay_width_ = 64;
-	const int kdisplay_height_ = 32;
-	std::array<uint32_t, 64 * 32> display_{};
+	std::array<std::uint32_t, INTERNAL_WIDTH * INTERNAL_HEIGHT> display_{};
 };
 
 #endif

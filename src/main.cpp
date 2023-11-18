@@ -2,8 +2,6 @@
 #include <iostream>
 #include <memory>
 
-// #include "SDL.h"
-
 #include "chippy_cpu.hpp"
 #include "chippy_display.hpp"
 // #include "chippy_input.h"
@@ -38,16 +36,16 @@ int main(int argc, char **argv)
 	file.close();
 
 	/* Load temp buffer into memory */
-	cpu->LoadProgram(buffer, size);
+	cpu->LoadProgram(buffer, static_cast<size_t>(size));
 
 	/* Cleanup */
 	delete[] buffer;
 
 	SetTargetFPS(60);
-	while(display->IsWindowRunning())
+	while (display->IsWindowRunning())
 	{
 		/* Roughly 8 instructions per frame */
-		for(auto i = 0; i < 8; i++)
+		for (auto i = 0; i < 8; i++)
 		{
 			cpu->Opcode();
 		}
@@ -57,35 +55,4 @@ int main(int argc, char **argv)
 	}
 
 	return 0;
-	
-	/* Loop will try to run at 60 FPS, not accurate because of sleep */
-	// bool quit = false;
-	// SDL_Event e;
-	// Uint32 time_per_frame = 1000 / 60;
-	// while (true)
-	// {
-	// 	auto start_time = SDL_GetTicks();
-
-	// 	while (SDL_PollEvent(&e) != 0)
-	// 	{
-	// 		if (e.type == SDL_QUIT)
-	// 		{
-	// 			return 0;
-	// 		}
-	// 	}
-
-	// 	/* Roughly 8 instructions per frame */
-	// 	for(auto i = 0; i < 8; i++)
-	// 	{
-	// 		cpu->SetKeyboardState(input->GetInput());
-	// 		cpu->Opcode();
-	// 	}
-
-	// 	auto end_time = SDL_GetTicks();
-	// 	auto delta_time = end_time - start_time;
-	// 	SDL_Delay(time_per_frame - delta_time);
-
-	// 	cpu->UpdateTimers();
-	// 	display->Draw(cpu->GetDisplayBuffer());
-	// }
 }

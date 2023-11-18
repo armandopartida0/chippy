@@ -14,6 +14,7 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
     src/chippy_cpu.hpp
     src/chippy_display.hpp
+    src/configuration.hpp
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS})
