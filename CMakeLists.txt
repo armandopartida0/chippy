@@ -10,10 +10,12 @@ set(PROJECT_SOURCES
     src/main.cpp
     src/chippy_cpu.cpp
     src/chippy_display.cpp
+    src/chippy_input.cpp
 )
 set(PROJECT_HEADERS
     src/chippy_cpu.hpp
     src/chippy_display.hpp
+    src/chippy_input.hpp
     src/configuration.hpp
 )
 

@@ -4,7 +4,7 @@
 
 #include "chippy_cpu.hpp"
 #include "chippy_display.hpp"
-// #include "chippy_input.h"
+#include "chippy_input.hpp"
 
 int main(int argc, char **argv)
 {
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
 	/* Initialize */
 	std::unique_ptr<ChippyCpu> cpu = std::make_unique<ChippyCpu>();
-	// std::unique_ptr<ChippyInput> input = std::make_unique<ChippyInput>();
+	std::unique_ptr<ChippyInput> input = std::make_unique<ChippyInput>();
 	std::unique_ptr<ChippyDisplay> display = std::make_unique<ChippyDisplay>();
 
 	/* Load file into temp buffer */
@@ -44,14 +44,18 @@ int main(int argc, char **argv)
 	SetTargetFPS(60);
 	while (display->IsWindowRunning())
 	{
+		
+
 		/* Roughly 8 instructions per frame */
 		for (auto i = 0; i < 8; i++)
 		{
+			cpu->SetKeyboardState(input->GetInput());
 			cpu->Opcode();
 		}
 
 		cpu->UpdateTimers();
 		display->Draw(cpu->GetDisplayBuffer());
+		// input->ClearInputs();
 	}
 
 	return 0;
