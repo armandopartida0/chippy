@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.27)
 project(chippy)
 
-# Adding raylib (Might use raylib-cpp in future, for now just assume we have
-# raylib built somewhere)
+# Find raylib, if not found, just use our version
 find_package(raylib QUIET)
+if(NOT raylib_FOUND)
+    add_subdirectory(external/raylib-4.5.0)
+endif()
 
 # Our project files
 set(PROJECT_SOURCES
