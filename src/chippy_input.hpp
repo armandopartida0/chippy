@@ -1,12 +1,11 @@
-#ifndef CHIPPY_INPUT_H
-#define CHIPPY_INPUT_H
+#ifndef CHIPPY_INPUT_HPP
+#define CHIPPY_INPUT_HPP
 
+#include <algorithm>
 #include <array>
 
-#include "SDL.h"
-
-/* 
-  Our keyboard: 
+/*
+  Our keyboard:
   If a key at any index is 1, then that key is pressed; otherwise not pressed.
   Layout of chippy's keyboard
   Of course we map it differently. I have 60% keyboard :(
@@ -21,10 +20,10 @@
 class ChippyInput
 {
 public:
-  ChippyInput() {};
-  ~ChippyInput() {};
+  ChippyInput() {}
+  ~ChippyInput() {}
 
-  std::array<int, 16>& GetInput();
+  std::array<int, 16> &GetInput();
 
 private:
   std::array<int, 16> keyboard_{};

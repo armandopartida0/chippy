@@ -1,5 +1,5 @@
 # chippy
-Just a simple Chip-8 emulator written in C++ and uses SDL2. Dumb name I know
+Just a simple Chip-8 emulator written in C++ and uses raylib. Dumb name I know
 
 ## Status
 * As of now, Chip-8 opcodes fully implemented

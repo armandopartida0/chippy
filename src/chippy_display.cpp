@@ -1,34 +1,30 @@
-#include "chippy_display.h"
+#include "chippy_display.hpp"
 
 ChippyDisplay::ChippyDisplay()
 {
-  /* Setup SDL2 window */
-  if(SDL_Init(SDL_INIT_VIDEO) != 0)
-  {
-    std::cout << "Failed to initialize SDL Video subsystem \n";
-  }
-  else
-  {
-    window_ = SDL_CreateWindow("chippy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-      kwindow_width_, kwindow_height_, SDL_WINDOW_SHOWN);
-		renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
-  }
+  // Configure window
+  InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "chippy");
+  SetConfigFlags(FLAG_VSYNC_HINT);
+
+  // Setup internal display (Just a scaled up texture)
+  Image image = GenImageColor(64, 32, BLACK);
+  texture_ = LoadTextureFromImage(image);
+  SetTextureFilter(texture_, TEXTURE_FILTER_POINT);
+  UnloadImage(image);
 }
 
 ChippyDisplay::~ChippyDisplay()
 {
-  SDL_DestroyRenderer(renderer_);
-  SDL_DestroyWindow(window_);
-  SDL_Quit();
+  UnloadTexture(texture_);
 }
 
-void ChippyDisplay::Draw(std::array<uint32_t, 64 * 32> buffer)
+void ChippyDisplay::Draw(const std::array<std::uint32_t, INTERNAL_WIDTH * INTERNAL_HEIGHT> &buffer) const
 {
-  SDL_Texture* texture = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_RGBA8888, 
-    SDL_TEXTUREACCESS_STREAMING, 64, 32);
+  // Update texture on GPU
+  UpdateTexture(texture_, &buffer);
 
-  SDL_UpdateTexture(texture, nullptr, buffer.data(), sizeof(buffer[0]) * 64);
-	SDL_RenderClear(renderer_);
-	SDL_RenderCopy(renderer_, texture, nullptr, nullptr);
-	SDL_RenderPresent(renderer_);
+  BeginDrawing();
+  ClearBackground(BLACK);
+  DrawTextureEx(texture_, {0, 0}, 0.0, WINDOW_WIDTH / INTERNAL_WIDTH, WHITE); // Scale up texture to window
+  EndDrawing();
 }
