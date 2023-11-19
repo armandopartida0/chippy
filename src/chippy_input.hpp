@@ -24,7 +24,6 @@ public:
   ~ChippyInput() {}
 
   std::array<int, 16> &GetInput();
-  void ClearInputs() { std::fill(std::begin(keyboard_), std::end(keyboard_), 0); }
 
 private:
   std::array<int, 16> keyboard_{};

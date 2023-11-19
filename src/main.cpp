@@ -55,7 +55,6 @@ int main(int argc, char **argv)
 
 		cpu->UpdateTimers();
 		display->Draw(cpu->GetDisplayBuffer());
-		// input->ClearInputs();
 	}
 
 	return 0;
